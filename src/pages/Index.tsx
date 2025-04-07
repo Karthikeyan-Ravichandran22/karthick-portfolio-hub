@@ -8,6 +8,11 @@ import Projects from "@/components/Projects";
 import Skills from "@/components/Skills";
 import Contact from "@/components/Contact";
 import Footer from "@/components/Footer";
+import AnimatedBackground from "@/components/AnimatedBackground";
+import FloatingIcons from "@/components/FloatingIcons";
+import ScrollIndicator from "@/components/ScrollIndicator";
+import Cursor from "@/components/Cursor";
+import { LazyMotion, domAnimation } from "framer-motion";
 
 const Index = () => {
   // Add smooth scrolling and animation reveal effects
@@ -32,16 +37,23 @@ const Index = () => {
   }, []);
 
   return (
-    <div className="min-h-screen">
-      <Navbar />
-      <Hero />
-      <About />
-      <Experience />
-      <Projects />
-      <Skills />
-      <Contact />
-      <Footer />
-    </div>
+    <LazyMotion features={domAnimation}>
+      <div className="min-h-screen">
+        <AnimatedBackground />
+        <FloatingIcons />
+        <ScrollIndicator />
+        <Cursor />
+        
+        <Navbar />
+        <Hero />
+        <About />
+        <Experience />
+        <Projects />
+        <Skills />
+        <Contact />
+        <Footer />
+      </div>
+    </LazyMotion>
   );
 };
 
