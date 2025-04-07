@@ -2,11 +2,13 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { projects } from "@/data/projectsData";
-import { ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowRight, ExternalLink, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Projects = () => {
   const [isVisible, setIsVisible] = useState(false);
+  const [hoveredProject, setHoveredProject] = useState<number | null>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -26,95 +28,266 @@ const Projects = () => {
     };
   }, []);
 
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 50, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: { duration: 0.8, ease: "easeOut" }
+    }
+  };
+
   return (
     <section id="projects" className="relative overflow-hidden py-24 bg-gradient-to-br from-white to-blue-50 dark:from-gray-900 dark:to-gray-800">
       <div className="absolute inset-0 -z-10">
-        <div className="absolute top-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full blur-3xl"></div>
-        <div className="absolute bottom-1/3 left-1/3 w-96 h-96 bg-teal-500/5 rounded-full blur-3xl"></div>
+        {/* Animated background blobs */}
+        <div className="blob absolute top-1/4 right-1/4 w-96 h-96 bg-blue-500/5 rounded-full"></div>
+        <div className="blob absolute bottom-1/3 left-1/3 w-96 h-96 bg-teal-500/5 rounded-full" style={{ animationDelay: "3s" }}></div>
+        <div className="blob absolute top-1/2 left-1/2 w-80 h-80 bg-purple-500/5 rounded-full" style={{ animationDelay: "6s" }}></div>
         <div className="absolute -top-24 left-1/2 transform -translate-x-1/2 w-full h-48 bg-gradient-to-b from-transparent to-white/90 dark:to-gray-900/90 backdrop-blur-sm"></div>
+        
+        {/* Animated particles */}
+        {Array.from({ length: 20 }).map((_, i) => (
+          <motion.div
+            key={i}
+            className="absolute w-1 h-1 bg-blue-500/30 rounded-full"
+            initial={{ 
+              x: Math.random() * 100 + "%", 
+              y: Math.random() * 100 + "%" 
+            }}
+            animate={{ 
+              y: [
+                Math.random() * 100 + "%", 
+                Math.random() * 100 + "%",
+                Math.random() * 100 + "%"
+              ]
+            }}
+            transition={{ 
+              duration: 10 + Math.random() * 20, 
+              repeat: Infinity,
+              repeatType: "reverse"
+            }}
+          />
+        ))}
       </div>
       
       <div className="section-container relative z-10">
-        <div className="text-center mb-16">
-          <div className="inline-block mb-4">
+        <motion.div 
+          className="text-center mb-16"
+          initial={{ opacity: 0, y: 30 }}
+          animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+          transition={{ duration: 0.7 }}
+        >
+          <div className="inline-block mb-4 relative">
+            <motion.div
+              className="absolute -right-8 -top-8"
+              animate={{
+                rotate: [0, 10, -10, 5, -5, 0],
+                scale: [1, 1.2, 0.9, 1.1, 1]
+              }}
+              transition={{ duration: 6, repeat: Infinity }}
+            >
+              <Sparkles className="text-blue-500/70 h-6 w-6" />
+            </motion.div>
+            
             <h2 className="relative z-10">
               <span className="relative">
                 My Projects
-                <div className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-teal-500 to-purple-600 rounded-full transform"></div>
+                <motion.div 
+                  className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-blue-600 via-teal-500 to-purple-600 rounded-full"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: isVisible ? 1 : 0 }}
+                  transition={{ duration: 1, delay: 0.5 }}
+                ></motion.div>
               </span>
             </h2>
           </div>
-          <p className="mt-6 text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+          <motion.p 
+            className="mt-6 text-lg text-gray-600 dark:text-gray-300 max-w-3xl mx-auto"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: isVisible ? 1 : 0 }}
+            transition={{ duration: 1, delay: 0.7 }}
+          >
             Showcasing my key machine learning and generative AI projects
-          </p>
-        </div>
+          </motion.p>
+        </motion.div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <motion.div 
+          className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
+          variants={containerVariants}
+          initial="hidden"
+          animate={isVisible ? "visible" : "hidden"}
+        >
           {projects.map((project, index) => (
-            <div 
+            <motion.div 
               key={index}
-              className={`transform transition-all duration-700 ${
-                isVisible 
-                  ? 'translate-y-0 opacity-100' 
-                  : 'translate-y-20 opacity-0'
-              }`}
-              style={{ transitionDelay: `${index * 0.1}s` }}
+              variants={itemVariants}
+              onHoverStart={() => setHoveredProject(index)}
+              onHoverEnd={() => setHoveredProject(null)}
+              whileHover={{ 
+                scale: 1.03,
+                transition: { duration: 0.3 }
+              }}
             >
               <Card 
-                className="group overflow-hidden border-0 shadow-lg hover:shadow-xl transition-all duration-500 h-full bg-white dark:bg-gray-800 relative"
+                className="h-full bg-white dark:bg-gray-800 overflow-hidden border-0 shadow-lg relative group"
               >
-                {/* Decorative top gradient bar */}
-                <div className="h-2 bg-gradient-to-r from-blue-600 via-teal-500 to-purple-600 transform transition-transform duration-500 group-hover:scale-x-100 origin-left"></div>
+                {/* Enhanced animated gradient top bar */}
+                <motion.div 
+                  className="h-2 bg-gradient-to-r from-blue-600 via-teal-500 to-purple-600"
+                  initial={{ scaleX: 0 }}
+                  animate={{ scaleX: hoveredProject === index ? 1 : 0 }}
+                  transition={{ duration: 0.3 }}
+                  style={{ transformOrigin: "left" }}
+                ></motion.div>
                 
                 <div className="h-48 overflow-hidden relative">
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-teal-500/20 z-10 group-hover:opacity-0 transition-opacity duration-500"></div>
-                  <img
+                  <motion.div 
+                    className="absolute inset-0 bg-gradient-to-br from-blue-500/20 to-teal-500/20 z-10"
+                    animate={{ 
+                      opacity: hoveredProject === index ? 0 : 1 
+                    }}
+                    transition={{ duration: 0.5 }}
+                  ></motion.div>
+                  
+                  <motion.img
                     src={project.image}
                     alt={project.title}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                    className="w-full h-full object-cover"
+                    animate={{ 
+                      scale: hoveredProject === index ? 1.1 : 1 
+                    }}
+                    transition={{ duration: 0.7 }}
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-end p-4 z-20">
-                    <h4 className="text-white text-lg font-bold">{project.title}</h4>
-                  </div>
+                  
+                  <motion.div 
+                    className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4 z-20"
+                    initial={{ opacity: 0 }}
+                    animate={{ 
+                      opacity: hoveredProject === index ? 1 : 0 
+                    }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <motion.h4 
+                      className="text-white text-lg font-bold"
+                      initial={{ y: 20 }}
+                      animate={{ 
+                        y: hoveredProject === index ? 0 : 20 
+                      }}
+                      transition={{ duration: 0.5 }}
+                    >
+                      {project.title}
+                    </motion.h4>
+                  </motion.div>
                 </div>
                 
                 <CardContent className="p-6 flex-grow">
-                  <h3 className="text-xl font-bold mb-3 text-gray-900 dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors duration-300">{project.title}</h3>
-                  <p className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3">
+                  <motion.h3 
+                    className="text-xl font-bold mb-3 text-gray-900 dark:text-white transition-colors duration-300"
+                    animate={{ 
+                      color: hoveredProject === index ? '#3b82f6' : '' 
+                    }}
+                  >
+                    {project.title}
+                  </motion.h3>
+                  
+                  <motion.p 
+                    className="text-gray-600 dark:text-gray-300 mb-4 line-clamp-3"
+                    animate={{ 
+                      opacity: [0.8, 1],
+                      y: hoveredProject === index ? [2, 0] : 0 
+                    }}
+                    transition={{ duration: 0.3 }}
+                  >
                     {project.description}
-                  </p>
+                  </motion.p>
+                  
                   <div className="flex flex-wrap gap-2 mt-auto">
                     {project.technologies.map((tech, techIndex) => (
-                      <Badge 
-                        key={techIndex} 
-                        variant="outline" 
-                        className="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-100 dark:border-blue-800 hover:bg-blue-100 transition-colors"
+                      <motion.div
+                        key={techIndex}
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ 
+                          opacity: 1, 
+                          scale: 1,
+                          y: hoveredProject === index ? [5, 0] : 0
+                        }}
+                        transition={{ 
+                          duration: 0.4, 
+                          delay: 0.1 * techIndex + (hoveredProject === index ? 0.2 : 0) 
+                        }}
                       >
-                        {tech}
-                      </Badge>
+                        <Badge 
+                          variant="outline" 
+                          className="bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300 border-blue-100 dark:border-blue-800 hover:bg-blue-100 transition-colors"
+                        >
+                          {tech}
+                        </Badge>
+                      </motion.div>
                     ))}
                   </div>
                 </CardContent>
                 
                 <CardFooter className="p-6 pt-0">
-                  <a
+                  <motion.a
                     href={project.link || "#"}
                     className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium group/link"
+                    whileHover={{ x: 3 }}
+                    transition={{ duration: 0.2 }}
                   >
-                    View Project <ExternalLink className="ml-2 h-4 w-4 transform group-hover/link:translate-x-1 transition-transform" />
-                  </a>
+                    View Project 
+                    <motion.span
+                      className="ml-2"
+                      animate={{ 
+                        x: hoveredProject === index ? [0, 4, 0] : 0 
+                      }}
+                      transition={{ 
+                        duration: 0.6, 
+                        repeat: hoveredProject === index ? Infinity : 0,
+                        repeatType: "loop",
+                        repeatDelay: 0.5
+                      }}
+                    >
+                      <ExternalLink className="h-4 w-4" />
+                    </motion.span>
+                  </motion.a>
                 </CardFooter>
                 
-                {/* Corner decorative element */}
-                <div className="absolute top-0 right-0 w-16 h-16 overflow-hidden">
-                  <div className="absolute transform rotate-45 bg-gradient-to-r from-blue-600 to-teal-500 text-white w-24 text-center text-xs py-1 right-[-35px] top-[12px] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    New
-                  </div>
-                </div>
+                {/* Enhanced corner decorative element */}
+                <AnimatePresence>
+                  {hoveredProject === index && (
+                    <motion.div 
+                      className="absolute top-0 right-0 w-16 h-16 overflow-hidden"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      <motion.div 
+                        className="absolute transform rotate-45 bg-gradient-to-r from-blue-600 to-teal-500 text-white w-24 text-center text-xs py-1 right-[-35px] top-[12px]"
+                        initial={{ y: -30 }}
+                        animate={{ y: 0 }}
+                        exit={{ y: -30 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        New
+                      </motion.div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </Card>
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );
