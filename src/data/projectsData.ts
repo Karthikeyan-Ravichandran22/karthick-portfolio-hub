@@ -9,6 +9,24 @@ export interface Project {
 
 export const projects: Project[] = [
   {
+    title: "Generative AI-Powered Content Platform",
+    description: "Built an enterprise-grade content generation platform using LLMs that increased content creation efficiency by 70% for marketing teams.",
+    technologies: ["LangChain", "OpenAI API", "React", "Python", "FastAPI"],
+    image: "/placeholder.svg"
+  },
+  {
+    title: "RAG System for Legal Document Analysis",
+    description: "Developed a Retrieval-Augmented Generation system that analyzed 75,000+ legal documents with 85% accuracy, providing valuable insights for compliance teams.",
+    technologies: ["Transformers", "Vector Databases", "Hugging Face", "LangChain"],
+    image: "/placeholder.svg"
+  },
+  {
+    title: "AI Agent-Based Workflow Automation",
+    description: "Created a system of AI agents that automate complex business workflows, reducing manual intervention by 60% and increasing processing speed by 4x.",
+    technologies: ["LLM Orchestration", "Function Calling", "Python", "FastAPI"],
+    image: "/placeholder.svg"
+  },
+  {
     title: "Customer Retention Prediction System",
     description: "Built a machine learning model that increased customer retention prediction accuracy by 20%, directly impacting business strategy and revenue.",
     technologies: ["Python", "XGBoost", "AWS", "Snowflake"],
@@ -21,27 +39,9 @@ export const projects: Project[] = [
     image: "/placeholder.svg"
   },
   {
-    title: "Legal Document Analysis System",
-    description: "Created an NLP-based system that analyzed 75,000+ legal documents with 80% clustering accuracy, providing valuable insights for compliance teams.",
-    technologies: ["Transformers", "BERT", "Hugging Face", "LangChain"],
-    image: "/placeholder.svg"
-  },
-  {
-    title: "ML Pipeline Optimization",
-    description: "Engineered optimizations that reduced ML model training time by 70%, significantly improving team productivity and business responsiveness.",
-    technologies: ["MLflow", "Python", "Distributed Computing", "GPU Optimization"],
-    image: "/placeholder.svg"
-  },
-  {
     title: "Medical AI Chatbot",
     description: "Designed and implemented an AI-powered medical chatbot that tripled user interactions and increased satisfaction metrics by 20%.",
     technologies: ["Deep Learning", "NLP", "RASA", "Explainable AI"],
-    image: "/placeholder.svg"
-  },
-  {
-    title: "Campaign Analytics Dashboard",
-    description: "Developed statistical models and visualizations that increased campaign effectiveness by 20% through better donor response analysis.",
-    technologies: ["Power BI", "SQL", "Logistic Regression", "Decision Trees"],
     image: "/placeholder.svg"
   }
 ];

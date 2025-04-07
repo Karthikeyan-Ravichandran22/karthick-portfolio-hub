@@ -11,6 +11,16 @@ export interface Skill {
 
 export const skillsData: SkillCategory[] = [
   {
+    category: "Generative AI",
+    skills: [
+      { name: "Large Language Models", proficiency: 95 },
+      { name: "Prompt Engineering", proficiency: 95 },
+      { name: "RAG Systems", proficiency: 90 },
+      { name: "LLM Fine-tuning", proficiency: 85 },
+      { name: "AI Agent Development", proficiency: 85 }
+    ]
+  },
+  {
     category: "Machine Learning",
     skills: [
       { name: "Supervised Learning", proficiency: 95 },
