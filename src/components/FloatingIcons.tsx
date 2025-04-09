@@ -1,3 +1,4 @@
+
 import { useRef, useEffect } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { 
@@ -98,11 +99,17 @@ const FloatingIcons = () => {
       {/* Occasional sparkle effect */}
       <motion.div
         className="absolute"
+        initial={{
+          opacity: 0,
+          scale: 0.5,
+          x: 0,
+          y: 0
+        }}
         animate={{ 
           opacity: [0, 0.7, 0],
           scale: [0.5, 1.5, 0.5],
-          x: [0, "100vw"],
-          y: [0, "100vh"]
+          x: ["0%", "100%"],
+          y: ["0%", "100%"]
         }}
         transition={{ 
           duration: 4,
