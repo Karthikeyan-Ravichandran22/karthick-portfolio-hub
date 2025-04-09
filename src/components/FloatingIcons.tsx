@@ -2,7 +2,7 @@ import { useRef, useEffect } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { 
   BrainCircuit, Database, Cpu, Code, LineChart, Globe, 
-  FileCode, Network, LineChart2, BarChart, Sparkles 
+  FileCode, Network, BarChart, Sparkles 
 } from "lucide-react";
 
 type FloatingIcon = {
@@ -25,7 +25,7 @@ const FloatingIcons = () => {
     
     const icons = [
       BrainCircuit, Database, Cpu, Code, LineChart, 
-      Globe, FileCode, Network, LineChart2, BarChart
+      Globe, FileCode, Network, BarChart
     ];
     
     const generateIcons = () => {
