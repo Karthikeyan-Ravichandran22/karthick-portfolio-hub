@@ -70,14 +70,14 @@ const FloatingIcons = () => {
           key={icon.id}
           className="absolute opacity-10 text-blue-500 dark:text-blue-400"
           initial={{ 
-            x: icon.x, 
-            y: icon.y, 
+            x: `${icon.x}px`, 
+            y: `${icon.y}px`, 
             scale: 0,
             opacity: 0 
           }}
           animate={{ 
-            x: [icon.x, icon.x + (Math.random() - 0.5) * 100, icon.x],
-            y: [icon.y, icon.y + (Math.random() - 0.5) * 100, icon.y],
+            x: [`${icon.x}px`, `${icon.x + (Math.random() - 0.5) * 100}px`, `${icon.x}px`],
+            y: [`${icon.y}px`, `${icon.y + (Math.random() - 0.5) * 100}px`, `${icon.y}px`],
             scale: [0, 1, 0.8, 1],
             opacity: [0, 0.1, 0.15, 0.1]
           }}
@@ -102,14 +102,14 @@ const FloatingIcons = () => {
         initial={{
           opacity: 0,
           scale: 0.5,
-          x: 0,
-          y: 0
+          x: "0%",
+          y: "0%"
         }}
         animate={{ 
           opacity: [0, 0.7, 0],
           scale: [0.5, 1.5, 0.5],
-          x: ["0%", "100%"],
-          y: ["0%", "100%"]
+          x: ["0%", "100%", "0%"],
+          y: ["0%", "100%", "0%"]
         }}
         transition={{ 
           duration: 4,
