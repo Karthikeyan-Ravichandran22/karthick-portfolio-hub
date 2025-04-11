@@ -1,14 +1,20 @@
+
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { projects } from "@/data/projectsData";
-import { ArrowRight, ExternalLink, Sparkles } from "lucide-react";
+import { ArrowRight, ExternalLink, Github, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import ReactMarkdown from 'react-markdown';
 
 const Projects = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredProject, setHoveredProject] = useState<number | null>(null);
   const [loadedImages, setLoadedImages] = useState<Record<number, boolean>>({});
+  const [selectedReadme, setSelectedReadme] = useState<string | null>(null);
+  const [isReadmeOpen, setIsReadmeOpen] = useState(false);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -33,6 +39,14 @@ const Projects = () => {
       ...prev,
       [index]: true
     }));
+  };
+
+  const handleReadmeClick = (index: number) => {
+    const project = projects[index];
+    if (project?.readme) {
+      setSelectedReadme(project.readme);
+      setIsReadmeOpen(true);
+    }
   };
 
   const containerVariants = {
@@ -255,29 +269,85 @@ const Projects = () => {
                   </div>
                 </CardContent>
                 
-                <CardFooter className="p-6 pt-0">
-                  <motion.a
-                    href={project.link || "#"}
-                    className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium group/link"
-                    whileHover={{ x: 3 }}
-                    transition={{ duration: 0.2 }}
-                  >
-                    View Project 
-                    <motion.span
-                      className="ml-2"
-                      animate={{ 
-                        x: hoveredProject === index ? [0, 4, 0] : 0 
-                      }}
-                      transition={{ 
-                        duration: 0.6, 
-                        repeat: hoveredProject === index ? Infinity : 0,
-                        repeatType: "loop",
-                        repeatDelay: 0.5
-                      }}
+                <CardFooter className="p-6 pt-0 flex flex-wrap gap-4">
+                  {project.link && (
+                    <motion.a
+                      href={project.link}
+                      className="inline-flex items-center text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium group/link"
+                      whileHover={{ x: 3 }}
+                      transition={{ duration: 0.2 }}
+                      target="_blank"
+                      rel="noopener noreferrer"
                     >
-                      <ExternalLink className="h-4 w-4" />
-                    </motion.span>
-                  </motion.a>
+                      Demo 
+                      <motion.span
+                        className="ml-2"
+                        animate={{ 
+                          x: hoveredProject === index ? [0, 4, 0] : 0 
+                        }}
+                        transition={{ 
+                          duration: 0.6, 
+                          repeat: hoveredProject === index ? Infinity : 0,
+                          repeatType: "loop",
+                          repeatDelay: 0.5
+                        }}
+                      >
+                        <ExternalLink className="h-4 w-4" />
+                      </motion.span>
+                    </motion.a>
+                  )}
+                  
+                  {project.github && (
+                    <motion.a
+                      href={project.github}
+                      className="inline-flex items-center text-purple-600 dark:text-purple-400 hover:text-purple-800 dark:hover:text-purple-300 font-medium group/link"
+                      whileHover={{ x: 3 }}
+                      transition={{ duration: 0.2 }}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      GitHub 
+                      <motion.span
+                        className="ml-2"
+                        animate={{ 
+                          y: hoveredProject === index ? [0, -2, 0] : 0 
+                        }}
+                        transition={{ 
+                          duration: 0.6, 
+                          repeat: hoveredProject === index ? Infinity : 0,
+                          repeatType: "loop",
+                          repeatDelay: 0.5
+                        }}
+                      >
+                        <Github className="h-4 w-4" />
+                      </motion.span>
+                    </motion.a>
+                  )}
+                  
+                  {project.readme && (
+                    <motion.button
+                      onClick={() => handleReadmeClick(index)}
+                      className="inline-flex items-center text-green-600 dark:text-green-400 hover:text-green-800 dark:hover:text-green-300 font-medium group/link"
+                      whileHover={{ x: 3 }}
+                      transition={{ duration: 0.2 }}
+                    >
+                      README
+                      <motion.span
+                        className="ml-2"
+                        animate={{ 
+                          rotate: hoveredProject === index ? [0, 10, 0] : 0 
+                        }}
+                        transition={{ 
+                          duration: 0.6, 
+                          repeat: hoveredProject === index ? Infinity : 0,
+                          repeatType: "loop",
+                          repeatDelay: 0.5
+                        }}
+                      >
+                        <ArrowRight className="h-4 w-4" />
+                      </motion.span>
+                    </motion.button>
+                  )}
                 </CardFooter>
                 
                 {/* Enhanced corner decorative element */}
@@ -306,6 +376,27 @@ const Projects = () => {
           ))}
         </motion.div>
       </div>
+
+      {/* README Dialog */}
+      <Dialog open={isReadmeOpen} onOpenChange={setIsReadmeOpen}>
+        <DialogContent className="max-w-3xl max-h-[80vh] overflow-hidden">
+          <DialogHeader>
+            <DialogTitle>Project README</DialogTitle>
+            <DialogDescription>
+              Details and instructions for this project
+            </DialogDescription>
+          </DialogHeader>
+          <ScrollArea className="mt-6 h-[60vh] pr-4">
+            {selectedReadme && (
+              <div className="prose dark:prose-invert max-w-none">
+                <ReactMarkdown>
+                  {selectedReadme}
+                </ReactMarkdown>
+              </div>
+            )}
+          </ScrollArea>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 };
