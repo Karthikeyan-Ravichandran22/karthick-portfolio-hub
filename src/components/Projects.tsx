@@ -1,4 +1,3 @@
-
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { projects } from "@/data/projectsData";
@@ -9,6 +8,7 @@ import { motion, AnimatePresence } from "framer-motion";
 const Projects = () => {
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredProject, setHoveredProject] = useState<number | null>(null);
+  const [loadedImages, setLoadedImages] = useState<Record<number, boolean>>({});
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -27,6 +27,13 @@ const Projects = () => {
       if (section) observer.unobserve(section);
     };
   }, []);
+
+  const handleImageLoad = (index: number) => {
+    setLoadedImages(prev => ({
+      ...prev,
+      [index]: true
+    }));
+  };
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -88,6 +95,7 @@ const Projects = () => {
           animate={isVisible ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
           transition={{ duration: 0.7 }}
         >
+          {/* Section heading */}
           <div className="inline-block mb-4 relative">
             <motion.div
               className="absolute -right-8 -top-8"
@@ -160,15 +168,24 @@ const Projects = () => {
                     transition={{ duration: 0.5 }}
                   ></motion.div>
                   
-                  <motion.img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-full object-cover"
-                    animate={{ 
-                      scale: hoveredProject === index ? 1.1 : 1 
-                    }}
-                    transition={{ duration: 0.7 }}
-                  />
+                  {/* Image with loading placeholder */}
+                  <div className="w-full h-full bg-gray-200 dark:bg-gray-700 flex items-center justify-center">
+                    {!loadedImages[index] && (
+                      <div className="animate-pulse flex space-x-4">
+                        <div className="w-full h-full bg-gray-300 dark:bg-gray-600"></div>
+                      </div>
+                    )}
+                    <motion.img
+                      src={project.image}
+                      alt={project.title}
+                      className={`w-full h-full object-cover transition-opacity duration-300 ${loadedImages[index] ? 'opacity-100' : 'opacity-0'}`}
+                      onLoad={() => handleImageLoad(index)}
+                      animate={{ 
+                        scale: hoveredProject === index ? 1.1 : 1 
+                      }}
+                      transition={{ duration: 0.7 }}
+                    />
+                  </div>
                   
                   <motion.div 
                     className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4 z-20"
