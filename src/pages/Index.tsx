@@ -11,7 +11,6 @@ import Footer from "@/components/Footer";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import FloatingIcons from "@/components/FloatingIcons";
 import ScrollIndicator from "@/components/ScrollIndicator";
-import Cursor from "@/components/Cursor";
 import { LazyMotion, domAnimation } from "framer-motion";
 
 const Index = () => {
@@ -42,7 +41,6 @@ const Index = () => {
         <AnimatedBackground />
         <FloatingIcons />
         <ScrollIndicator />
-        <Cursor />
         
         <Navbar />
         <Hero />
