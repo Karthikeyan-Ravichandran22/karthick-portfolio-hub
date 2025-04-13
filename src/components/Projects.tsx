@@ -225,7 +225,7 @@ const Projects = () => {
                 <CardContent className="p-6 flex-grow">
                   <motion.h3 
                     className="text-xl font-bold mb-3 text-gray-900 dark:text-white transition-colors duration-300"
-                    style={{ 
+                    animate={{ 
                       color: hoveredProject === index ? '#3b82f6' : '' 
                     }}
                   >
@@ -402,4 +402,3 @@ const Projects = () => {
 };
 
 export default Projects;
-
